@@ -1,5 +1,5 @@
 Array.prototype.MyFilter = function(cb){
-    // arrow function (cb) => {} does not have its own this binding, so this in your code will refer to the global object, not to the array. To make this refer to the array,
+    // arrow function (cb) => {} does not have its own this binding, so this in your code will refer to the global object, not to the array.
     const temp = [];
     for(let i=0;i<this.length;i++){
         if(cb(this[i], i, this)){
