@@ -1,0 +1,13 @@
+Q1. we have an html page which takeing time to load how to optimize loading time??
+Q2. What is responsive and how we can implement in our web ??
+Q3. flex-box and grid which one you will preferred??
+Q4. You have an website which takeing time to load how you can optimize loading performane??
+Q5. const increment = useCallback(()=>{
+  setCount(count+1);
+},[]);
+you have an button onclick this count will increase, will render count also increase??
+Q6. What is event manager??
+Q7. useMemo and useCallback uses??
+Q8. https how provode security??
+Q9. middleware in redux??
+Q10. what is buldlers and different type of its
