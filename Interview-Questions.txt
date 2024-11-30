@@ -11,3 +11,7 @@ Q7. useMemo and useCallback uses??
 Q8. https how provode security??
 Q9. middleware in redux??
 Q10. what is buldlers and different type of its
+Q11. package.json vs package-lock.json
+Q12. major minor and patch means in package.json and ^ syambol meaning and uses?
+Q13. javaScript event vs Nodejs Event loop??
+Q14. put vs patch method and when we should use??
