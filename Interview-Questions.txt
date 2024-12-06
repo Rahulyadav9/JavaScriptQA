@@ -15,3 +15,19 @@ Q11. package.json vs package-lock.json
 Q12. major minor and patch means in package.json and ^ syambol meaning and uses?
 Q13. javaScript event vs Nodejs Event loop??
 Q14. put vs patch method and when we should use??
+Q15. shallow comparison and deep comparison?? example 
+let a = {a: 3}
+let b = {a: 3}
+let c = b;  
+ 
+console.log(a==b) //false
+console.log(a===b) 	//false
+console.log(c==b)   //true	
+console.log(c===b)  // true
+Objects are compared by reference, not by value.
+Even if two objects have the same structure and values, they are considered unequal unless they reference the same memory location.
+c is assigned to b, so both variables share the same reference.
+This is why c == b and c === b both evaluate to true.
+
+
+Q15. 
