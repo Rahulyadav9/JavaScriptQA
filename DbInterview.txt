@@ -88,3 +88,50 @@ MongoDB and MySQL are both popular database management systems, but they serve d
 - **MySQL**: Best for structured data with well-defined relationships and transactional consistency.  
 
 Choose based on your project’s requirements and expected data structure!
+
+
+ACID Property explain
+
+1. A - Atomicity
+Definition: Ensures that a transaction is treated as a single, indivisible unit. Either the entire transaction succeeds, or none of its parts are applied to the database. If any part of the transaction fails, the database is left unchanged.
+
+Example: Consider transferring money between two bank accounts:
+
+Debit $100 from Account A.
+Credit $100 to Account B.
+If the debit step succeeds but the credit step fails (e.g., due to a network issue), the database must undo the debit, ensuring the balance remains correct.
+
+2. C - Consistency
+Definition: Ensures that a transaction brings the database from one valid state to another. After the transaction, all data must comply with the defined integrity constraints.
+
+Example:
+
+In a banking database, the sum of all account balances must always be equal to the total money in the bank.
+Even after a transfer or withdrawal, this rule is preserved.
+3. I - Isolation
+Definition: Ensures that multiple transactions can occur simultaneously without interfering with each other. The intermediate state of a transaction should not be visible to other concurrent transactions.
+
+Example:
+
+If two transactions are running:
+Transaction 1: Transfers $100 from Account A to Account B.
+Transaction 2: Transfers $200 from Account B to Account C.
+Each transaction should behave as if it’s running alone. The final result should not depend on the order in which they are executed.
+4. D - Durability
+Definition: Ensures that once a transaction is committed, its changes are permanently recorded in the database, even in the event of a system failure.
+
+Example:
+
+After transferring $100 from Account A to Account B, if the system crashes, the transaction’s result (both debit and credit) must still be present in the database after recovery.
+Summary with Example:
+Use Case: Bank Account Transaction
+A transaction involves:
+
+Debit $100 from Account A.
+Credit $100 to Account B.
+Atomicity: If the debit fails or the credit fails, the entire transaction is rolled back, ensuring no partial results.
+Consistency: The sum of Account A and B’s balances remains unchanged after the transaction.
+Isolation: Other transactions querying Account A or B during this process won’t see an inconsistent intermediate state.
+Durability: Once completed and committed, the transfer is permanent, even if the system crashes afterward.
+Conclusion
+ACID properties ensure that database transactions are processed reliably, maintaining data integrity and ensuring the trustworthiness of the database system.
