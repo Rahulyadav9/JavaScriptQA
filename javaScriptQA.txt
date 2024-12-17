@@ -458,3 +458,71 @@ Copy code
 let x = 10;
 x = "Hello";
 
+Q 1. Multiple function want to exicute parallel?
+Ans. // Simulating async functions
+const functionOne = () => new Promise((resolve, reject) => {
+  setTimeout(() => {
+    console.log("Function One executed");
+    resolve("Result from Function One");
+  }, 1000);
+});
+
+const functionTwo = () => new Promise((resolve, reject) => {
+  setTimeout(() => {
+    console.log("Function Two executed");
+    reject(new Error("Function Two failed"));
+  }, 1500);
+});
+
+const functionThree = () => new Promise((resolve, reject) => {
+  setTimeout(() => {
+    console.log("Function Three executed");
+    resolve("Result from Function Three");
+  }, 500);
+});
+
+// Execute functions in parallel
+const executeAllFunctions = async () => {
+  try {
+    const results = await Promise.all([
+      functionOne().catch(err => err.message),  // Catch error and handle it within
+      functionTwo().catch(err => err.message),  // Catch error and handle it within
+      functionThree().catch(err => err.message) // Catch error and handle it within
+    ]);
+
+    console.log("All functions completed with results:", results);
+  } catch (error) {
+    console.error("Error executing functions:", error);  // This won't catch errors anymore
+  }
+};
+
+executeAllFunctions();
+Ans2 : const functionOne = () => new Promise((resolve, reject) => {
+  setTimeout(() => resolve("Result from Function One"), 1000);
+});
+
+const functionTwo = () => new Promise((resolve, reject) => {
+  setTimeout(() => reject(new Error("Function Two failed")), 1500);
+});
+
+const functionThree = () => new Promise((resolve, reject) => {
+  setTimeout(() => resolve("Result from Function Three"), 500);
+});
+
+const executeAllFunctions = async () => {
+  const results = await Promise.allSettled([
+    functionOne(),
+    functionTwo(),
+    functionThree()
+  ]);
+
+  results.forEach((result, index) => {
+    if (result.status === "fulfilled") {
+      console.log(`Function ${index + 1} completed successfully with: ${result.value}`);
+    } else {
+      console.log(`Function ${index + 1} failed with error: ${result.reason.message}`);
+    }
+  });
+};
+
+executeAllFunctions();
