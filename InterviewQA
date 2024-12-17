@@ -1,0 +1,115 @@
+### Q11. **`package.json` vs `package-lock.json`**
+- **`package.json`**: 
+  - Contains **project metadata** and a list of dependencies for the project.
+  - Only specifies the major versions or version ranges for dependencies (e.g., `"react": "^18.2.0"`).
+  - Used to install or share dependencies.
+
+- **`package-lock.json`**:
+  - Automatically generated to lock the exact versions of all dependencies and sub-dependencies.
+  - Ensures the same dependency versions are installed across different environments or systems.
+  - Useful for consistency and preventing conflicts during deployments.
+
+---
+
+### Q12. **Major, Minor, and Patch Versions in `package.json`**
+Follows **Semantic Versioning (SemVer)**:
+- **Major**: Breaking changes (e.g., `2.0.0` → breaking compatibility).
+- **Minor**: New features (non-breaking, e.g., `1.2.0`).
+- **Patch**: Bug fixes (non-breaking, e.g., `1.2.3`).
+
+#### **Caret (`^`) Symbol**
+- `^` allows updates for **minor** and **patch** versions but locks the **major** version.
+  - E.g., `"react": "^16.3.0"` allows versions like `16.4.5`, but not `17.0.0`.
+
+**Example Table:**
+| Version    | `^16.3.0` Matches       |
+|------------|-------------------------|
+| `16.3.5`   | ✔                       |
+| `16.4.0`   | ✔                       |
+| `17.0.0`   | ❌ (major change)        |
+
+---
+
+### Q13. **JavaScript Event Loop vs Node.js Event Loop**
+
+#### **JavaScript Event Loop** (Browser):
+- Handles asynchronous operations (e.g., `setTimeout`, event listeners) in the browser.
+- Event loop **pulls tasks** from the **Callback Queue** into the **Call Stack** when the stack is empty.
+
+**Phases:**
+1. **Call Stack** executes synchronous code.
+2. Asynchronous callbacks go to the **Callback Queue**.
+3. Event Loop moves tasks from **Queue → Stack** when the stack is empty.
+
+---
+
+#### **Node.js Event Loop**:
+- Node.js' event loop has additional **phases** because it handles server-side tasks like I/O, timers, and callbacks.
+
+**Phases of Node.js Event Loop**:
+1. **Timers**: Executes `setTimeout` and `setInterval` callbacks.
+2. **Pending Callbacks**: Executes I/O callbacks.
+3. **Idle**: System-level operations (internal use).
+4. **Poll**: Processes I/O events and fetches new I/O operations.
+5. **Check**: Executes `setImmediate()` callbacks.
+6. **Close Events**: Handles close events like socket closures.
+
+**Difference**: Node.js' event loop has extra phases (timers, I/O poll, check), optimized for server-side applications.
+
+---
+
+### Q14. **PUT vs PATCH Methods**
+
+| **Aspect**         | **PUT**                             | **PATCH**                           |
+|---------------------|-------------------------------------|------------------------------------|
+| **Definition**      | Updates the entire resource.        | Updates only part of the resource. |
+| **Idempotent**      | Yes. Multiple requests have the same result. | Yes.                                |
+| **Request Body**    | Requires the full resource data.    | Requires only the fields to update.|
+| **Example**         | Replace the entire user object.     | Modify only a user’s email field.  |
+
+**When to use:**
+- **PUT**: When **replacing** the entire resource (full update).
+- **PATCH**: When **updating part of the resource** (partial update).
+
+---
+
+### Q15. **Shallow Comparison vs Deep Comparison**
+
+- **Shallow Comparison**:
+  - Compares only the **references** or **primitive values** of objects.
+  - Does not check nested objects or structures.
+
+- **Deep Comparison**:
+  - Compares the content of objects, including nested objects.
+
+---
+
+**Code Example:**
+```javascript
+let a = { a: 3 };
+let b = { a: 3 };
+let c = b;
+
+console.log(a == b);  // false - different memory references
+console.log(a === b); // false - strict comparison (different references)
+console.log(c == b);  // true  - same memory reference
+console.log(c === b); // true  - same memory reference
+```
+
+- **`a` and `b`**: Even though their contents look identical, they are stored at different locations (references differ).
+- **`c` and `b`**: Both point to the same reference in memory.
+
+---
+
+### **Deep Comparison Example:**
+To perform deep comparison:
+```javascript
+function deepEqual(obj1, obj2) {
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
+
+let obj1 = { a: 3 };
+let obj2 = { a: 3 };
+
+console.log(deepEqual(obj1, obj2)); // true (Deep comparison)
+```
