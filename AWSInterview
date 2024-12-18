@@ -7,4 +7,9 @@
 7. codepipe line and cloud formation uses ??
 8. if you have to setup your own lambda and autodeploy on console how you will setcode code??
 9. what is vpc and uses ??
-
+10. howmany ways to be called lambda?
+11. default timeout of an lambda function and what can be max?
+12. what is vpc and uses?
+13. can we call n labda from s3?
+14. what lambda and benifits of it?
+15. what is code pipline and what is cloudformation?
