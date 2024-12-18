@@ -1,0 +1,253 @@
+Amazon **DynamoDB** is a fully managed NoSQL database service provided by AWS. It offers fast, predictable performance and is designed to scale seamlessly to handle large volumes of data.
+
+---
+
+### **Basic Features of DynamoDB**:
+1. **Key-Value and Document Store**:
+   - Stores data as key-value pairs or JSON-like documents.
+   - Ideal for applications requiring unstructured, semi-structured, or structured data.
+
+2. **Serverless**:
+   - No need to manage servers or infrastructure.
+   - AWS handles scaling, availability, and fault-tolerance.
+
+3. **Auto-Scaling**:
+   - Automatically adjusts read/write capacity to match workload requirements.
+
+4. **Global Tables**:
+   - Enables multi-region replication for global data access.
+
+5. **High Availability**:
+   - Data is replicated across multiple availability zones (AZs) for fault tolerance.
+
+6. **Built-in Security**:
+   - Provides encryption at rest, IAM roles for access, and integration with AWS Identity.
+
+---
+
+### **Core Components of DynamoDB**:
+1. **Tables**:
+   - A collection of items (analogous to rows in relational databases).
+
+2. **Items**:
+   - Represents individual records within a table.
+
+3. **Attributes**:
+   - Key-value pairs associated with an item (columns in relational terms).
+
+4. **Primary Key**:
+   - Uniquely identifies each item. Two types:
+     - **Partition Key**: Simple primary key (single attribute).
+     - **Partition Key + Sort Key**: Composite key for organizing and querying data hierarchically.
+
+5. **Indexes**:
+   - **Global Secondary Index (GSI)**: Additional queries with different partition/sort keys.
+   - **Local Secondary Index (LSI)**: Alternative queries within the same partition.
+
+6. **Streams**:
+   - Tracks data changes in real-time for triggering downstream processes.
+
+---
+
+### **Use Cases for DynamoDB**:
+1. **E-Commerce Applications**:
+   - Catalogs, shopping carts, and user profiles.
+
+2. **Gaming Applications**:
+   - Leaderboards, player statistics, and game state persistence.
+
+3. **IoT Data**:
+   - Storing time-series data from IoT sensors/devices.
+
+4. **Web and Mobile Applications**:
+   - Session management, chat applications, and scalable APIs.
+
+5. **Event Logging**:
+   - High-throughput logging systems.
+
+---
+
+### **Advantages of DynamoDB**:
+- **Scalability**: Automatically handles large-scale workloads.
+- **Fast and Reliable**: Single-digit millisecond response time.
+- **Serverless**: No setup or maintenance.
+- **Flexibility**: Schema-less design supports dynamic attribute sets.
+- **Integration**: Works seamlessly with AWS services like Lambda, S3, and API Gateway.
+
+---
+
+### **Example of Storing and Retrieving Data:**
+
+#### Creating a Table:
+```javascript
+const AWS = require('aws-sdk');
+const dynamoDB = new AWS.DynamoDB();
+
+const params = {
+    TableName: "Users",
+    KeySchema: [       
+        { AttributeName: "UserID", KeyType: "HASH" } // Partition Key
+    ],
+    AttributeDefinitions: [       
+        { AttributeName: "UserID", AttributeType: "S" } // String Type
+    ],
+    ProvisionedThroughput: {      
+        ReadCapacityUnits: 1, 
+        WriteCapacityUnits: 1
+    }
+};
+
+dynamoDB.createTable(params, (err, data) => {
+    if (err) console.error("Unable to create table. Error:", err);
+    else console.log("Table created successfully:", data);
+});
+```
+
+#### Inserting Data:
+```javascript
+const AWS = require('aws-sdk');
+const docClient = new AWS.DynamoDB.DocumentClient();
+
+const params = {
+    TableName: "Users",
+    Item: {
+        UserID: "12345",
+        Name: "John Doe",
+        Age: 30
+    }
+};
+
+docClient.put(params, (err, data) => {
+    if (err) console.error("Unable to add item. Error:", err);
+    else console.log("Item added successfully:", data);
+});
+```
+
+#### Retrieving Data:
+```javascript
+const params = {
+    TableName: "Users",
+    Key: {
+        UserID: "12345"
+    }
+};
+
+docClient.get(params, (err, data) => {
+    if (err) console.error("Unable to retrieve item. Error:", err);
+    else console.log("Retrieved item:", data);
+});
+```
+
+---
+
+### **Limitations of DynamoDB**:
+- Limited query flexibility compared to relational databases.
+- Global Secondary Indexes (GSIs) must be predefined.
+- Write throughput capacity must be pre-configured, though on-demand is available.
+
+
+Here are some commonly asked **Amazon DynamoDB interview questions and their answers**, categorized by difficulty:
+
+---
+
+### **Basic Questions**
+1. **What is DynamoDB?**
+   - DynamoDB is a fully managed NoSQL database provided by AWS. It supports key-value and document-based storage, offering seamless scalability, single-digit millisecond response times, and automatic scaling for throughput and storage.
+
+2. **What are the key features of DynamoDB?**
+   - **Serverless:** No server management required.
+   - **Flexible Schema:** Stores semi-structured, unstructured, or structured data.
+   - **Low Latency:** Single-digit millisecond response time.
+   - **Scalability:** Auto-scales read and write throughput.
+   - **Streams:** Captures data changes in real-time for event-driven architectures.
+
+3. **Explain primary key in DynamoDB.**
+   - A primary key is used to uniquely identify an item in a table. There are two types:
+     - **Partition Key (Hash Key):** A single attribute used to distribute data across partitions.
+     - **Composite Key:** Combination of a **partition key** and a **sort key**, allowing for range-based queries within the partition.
+
+4. **What are DynamoDB indexes?**
+   - Indexes allow for additional query flexibility:
+     - **Global Secondary Index (GSI):** Queries based on non-primary key attributes. Uses new partition and sort keys.
+     - **Local Secondary Index (LSI):** Alternative sort keys for querying within the same partition.
+
+---
+
+### **Intermediate Questions**
+5. **How does DynamoDB handle scalability?**
+   - DynamoDB uses **horizontal scaling** to automatically partition data based on the partition key. As your table grows, AWS creates additional partitions to distribute read/write loads.
+
+6. **What is DynamoDB Stream?**
+   - DynamoDB Streams captures a time-ordered sequence of changes (insert, update, delete) made to items in a table. This can be used for:
+     - **Triggering Lambda functions**
+     - **Data replication**
+     - **Audit trails**
+
+7. **What is a DynamoDB TTL, and why is it used?**
+   - TTL (Time to Live) automatically deletes expired items from a table to reduce storage costs and maintain table cleanliness.
+
+8. **What is the difference between on-demand and provisioned capacity modes?**
+   - **On-Demand Mode:** Automatically adjusts capacity based on traffic spikes. You pay for requests only.
+   - **Provisioned Mode:** Manually define read/write capacity units (RCUs/WCUs). Ideal for consistent workloads.
+
+9. **What is write consistency in DynamoDB?**
+   - **Eventual Consistency:** Provides better performance but the data may not be immediately consistent across replicas.
+   - **Strong Consistency:** Ensures immediate consistency for all reads.
+
+---
+
+### **Advanced Questions**
+10. **How does DynamoDB ensure durability?**
+    - DynamoDB replicates data across multiple availability zones (AZs) within an AWS region. These replicas ensure data durability and availability during hardware or network failures.
+
+11. **What is the role of the partition key in DynamoDB?**
+    - The partition key determines the physical storage location of the item. Items with the same partition key are stored together, enabling fast lookups.
+
+12. **What are DynamoDB limits?**
+    - Item size: Maximum of **400 KB**.
+    - Table: Up to **20 GSIs and 5 LSIs** per table.
+    - Query results: Up to **1 MB** of data or 1,000 items at a time.
+    - Attribute value size: Maximum **400 KB** per item.
+
+13. **How would you optimize the read performance in DynamoDB?**
+    - Use **Global Secondary Indexes (GSIs)** for alternate query patterns.
+    - Use **parallel scans** for faster data retrieval during scans.
+    - **Cache** data using DynamoDB Accelerator (DAX).
+
+14. **How does DynamoDB achieve data partitioning?**
+    - DynamoDB divides its table into **partitions** based on the partition key's hash value. AWS distributes these partitions across servers for horizontal scaling.
+
+---
+
+### **Practical Questions**
+15. **How would you query all items in a DynamoDB table?**
+    - Use the **Scan** operation to fetch all items. However, it is less efficient compared to a Query, as it scans every item in the table.
+
+16. **Can DynamoDB handle transactions?**
+    - Yes, DynamoDB supports **ACID transactions**, which allow you to group multiple read/write operations across different tables in a single transaction.
+
+17. **How would you migrate a MySQL database to DynamoDB?**
+    - Steps include:
+      - Export data from MySQL as JSON/CSV.
+      - Use **AWS Database Migration Service (DMS)** or custom scripts to import the data.
+      - Re-design relational schemas to NoSQL format (denormalization, embedding).
+
+18. **What happens if a Lambda processing a DynamoDB Stream fails?**
+    - If Lambda fails to process a DynamoDB stream, the unprocessed record remains in the stream. You can:
+      - Set up a dead-letter queue for debugging.
+      - Configure retries.
+
+---
+
+### **Scenario-Based Questions**
+19. **How do you handle hot partitions?**
+    - Ensure that partition keys have high cardinality.
+    - Use time-based keys for write-heavy tables (e.g., `user#timestamp`).
+    - Employ sharding (e.g., `hash(partition_key) + partition_key`).
+
+20. **What are some DynamoDB best practices?**
+    - Keep item size small to optimize performance.
+    - Use partition key with high cardinality to avoid throttling.
+    - Use sparse indexes to reduce the cost of GSIs.
+
+Would you like real-world implementations for any of these scenarios?
