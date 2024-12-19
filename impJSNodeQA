@@ -175,6 +175,24 @@ Here are some **advanced and challenging JavaScript and Node.js interview questi
       .on('data', function (item) {
         console.log(item);
       });
-    ```
 
-These questions will give a detailed understanding of advanced JavaScript concepts and Node.js specifics. Are there any of these topics you'd like me to elaborate on or further examples?
+
+
+### **Parallelism vs. Concurrency**
+
+| Aspect               | Concurrency                                          | Parallelism                                          |
+|----------------------|-----------------------------------------------------|----------------------------------------------------|
+| **Definition**       | Concurrency is the ability to execute multiple tasks or processes at the same time conceptually (not necessarily in parallel). | Parallelism is the actual execution of multiple tasks simultaneously on multiple processors or cores. |
+| **Nature**           | Involves task-switching or interleaving execution on a single core or processor. | Requires multiple cores/processors to truly execute tasks at the same time. |
+| **Example**          | Multithreading in a single-core CPU where tasks take turns being executed. | Dividing a computational task (e.g., matrix multiplication) into subtasks and processing them on different cores. |
+| **Hardware Requirement** | Can work on a single processor (through task scheduling). | Requires multiple processors or cores for true parallel execution. |
+| **Focus**            | About **managing tasks** and ensuring they progress over time. | About **speeding up computation** by performing multiple computations at once. |
+| **Use Cases**        | User interfaces where multiple activities (e.g., downloading a file and scrolling) must progress. | Data-intensive computations like machine learning model training or image processing. |
+| **Dependency**       | May involve tasks that rely on shared resources (can lead to conflicts like race conditions). | Focuses on tasks being **independent**, allowing them to be executed simultaneously. |
+| **Analogy**          | A person quickly switching between reading two books. | Two people reading two different books simultaneously. |
+
+---
+
+### **Key Insight**
+- **Concurrency** enables better utilization of time by overlapping tasks.
+- **Parallelism** increases performance by reducing the overall execution time.
