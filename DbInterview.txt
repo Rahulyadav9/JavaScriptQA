@@ -135,3 +135,218 @@ Isolation: Other transactions querying Account A or B during this process won’
 Durability: Once completed and committed, the transfer is permanent, even if the system crashes afterward.
 Conclusion
 ACID properties ensure that database transactions are processed reliably, maintaining data integrity and ensuring the trustworthiness of the database system.
+
+
+
+Here are some commonly asked **SQL interview questions** with detailed answers:
+
+---
+
+### **1. What is SQL?**
+**Answer:**
+SQL (Structured Query Language) is a standard programming language used to manage and manipulate relational databases. It is used for querying, updating, and managing data in a relational database system.
+
+---
+
+### **2. What is the difference between `INNER JOIN` and `LEFT JOIN`?**
+**Answer:**
+- **INNER JOIN**: Returns only the rows that have matching values in both tables.
+- **LEFT JOIN** (or **LEFT OUTER JOIN**): Returns all rows from the left table and matching rows from the right table. If no match is found, `NULL` is returned for columns from the right table.
+
+**Example:**
+```sql
+SELECT users.name, orders.product
+FROM users
+INNER JOIN orders ON users.id = orders.user_id;
+```
+This query only returns users who have orders.
+
+```sql
+SELECT users.name, orders.product
+FROM users
+LEFT JOIN orders ON users.id = orders.user_id;
+```
+This query returns all users, whether they have placed an order or not.
+
+---
+
+### **3. What is the difference between `UNION` and `UNION ALL`?**
+**Answer:**
+- **`UNION`**: Combines the result of two queries, removing duplicates from the result set.
+- **`UNION ALL`**: Combines the result of two queries without removing duplicates, and may include the same row multiple times.
+
+**Example:**
+```sql
+SELECT name FROM users
+UNION
+SELECT name FROM employees;
+```
+This query returns unique names from both tables.
+
+```sql
+SELECT name FROM users
+UNION ALL
+SELECT name FROM employees;
+```
+This query returns all names, including duplicates.
+
+---
+
+### **4. What is normalization and denormalization?**
+**Answer:**
+- **Normalization**: The process of organizing data to reduce redundancy and dependency by dividing large tables into smaller tables and defining relationships between them. The goal is to reduce data anomalies (update, insert, and delete anomalies). 
+  - **Forms**: First Normal Form (1NF), Second Normal Form (2NF), Third Normal Form (3NF).
+  
+- **Denormalization**: The process of merging data from multiple tables into one, often for performance reasons. It increases redundancy to improve read performance (reduces the number of joins during queries).
+
+---
+
+### **5. Explain the use of `GROUP BY` in SQL.**
+**Answer:**
+The `GROUP BY` statement is used to group rows that have the same values in specified columns into summary rows, such as finding the number of items per group or the total price per category. It is often used with aggregate functions like `COUNT()`, `SUM()`, `AVG()`, `MAX()`, and `MIN()`.
+
+**Example:**
+```sql
+SELECT department, COUNT(*) as number_of_employees
+FROM employees
+GROUP BY department;
+```
+This query groups employees by department and counts the number of employees in each department.
+
+---
+
+### **6. What are indexes in SQL and why are they used?**
+**Answer:**
+An **index** is a database object that improves the speed of data retrieval operations on a table at the cost of additional space and potential performance hits on insert/update operations. Indexes are used to speed up search queries on large tables.
+
+- **Primary Index**: Automatically created for primary key columns.
+- **Unique Index**: Ensures that the values in the indexed column are unique.
+- **Composite Index**: An index on multiple columns.
+
+**Example:**
+```sql
+CREATE INDEX idx_employee_name ON employees(name);
+```
+This query creates an index on the `name` column in the `employees` table.
+
+---
+
+### **7. What is a `subquery` in SQL?**
+**Answer:**
+A **subquery** is a query nested inside another query. It can be used to return a single value or multiple values and is typically used in the `WHERE`, `HAVING`, or `FROM` clause.
+
+**Example:**
+```sql
+SELECT name FROM employees 
+WHERE department_id = (SELECT id FROM departments WHERE name = 'HR');
+```
+In this query, the subquery retrieves the ID of the 'HR' department, and the main query uses that ID to find employees in that department.
+
+---
+
+### **8. What is a `PRIMARY KEY`?**
+**Answer:**
+A **PRIMARY KEY** is a field or combination of fields in a database table that uniquely identifies each row in the table. It must contain unique values and cannot contain `NULL`.
+
+**Example:**
+```sql
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    name VARCHAR(100)
+);
+```
+Here, `id` is the **primary key** of the `users` table.
+
+---
+
+### **9. What is the difference between `HAVING` and `WHERE` in SQL?**
+**Answer:**
+- **`WHERE`**: Used to filter rows before grouping and aggregation.
+- **`HAVING`**: Used to filter groups after the `GROUP BY` clause, usually with aggregate functions.
+
+**Example:**
+```sql
+-- Using WHERE
+SELECT department, COUNT(*)
+FROM employees
+WHERE salary > 50000
+GROUP BY department;
+
+-- Using HAVING
+SELECT department, COUNT(*)
+FROM employees
+GROUP BY department
+HAVING COUNT(*) > 10;
+```
+In the first example, `WHERE` filters employees with a salary greater than 50,000. In the second example, `HAVING` filters departments where there are more than 10 employees.
+
+---
+
+### **10. What is a `transaction` in SQL?**
+**Answer:**
+A **transaction** is a sequence of one or more SQL operations executed as a single unit. Transactions are used to ensure that a group of statements either all execute or none execute, ensuring the integrity of the database.
+
+- **ACID Properties**:
+  - **Atomicity**: The transaction is all or nothing.
+  - **Consistency**: The database remains consistent after the transaction.
+  - **Isolation**: Transactions are isolated from each other.
+  - **Durability**: Changes made by a transaction are permanent.
+
+**Commands**:
+- `START TRANSACTION`
+- `COMMIT` (to save changes)
+- `ROLLBACK` (to undo changes)
+
+**Example:**
+```sql
+START TRANSACTION;
+INSERT INTO accounts (balance) VALUES (1000);
+UPDATE accounts SET balance = balance - 500 WHERE id = 1;
+COMMIT;
+```
+This ensures that both the `INSERT` and `UPDATE` occur together.
+
+---
+
+### **11. What is the `AUTO_INCREMENT` keyword in MySQL?**
+**Answer:**
+The `AUTO_INCREMENT` keyword in MySQL is used to automatically increment the value of a column (typically the primary key) with each new row inserted. It ensures that each row has a unique value for that column.
+
+**Example:**
+```sql
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100)
+);
+```
+
+---
+
+### **12. What is the difference between `TRUNCATE` and `DELETE`?**
+**Answer:**
+- **`DELETE`**: Removes rows from a table based on a condition (can be rolled back in transactions). It can be slow for large datasets and doesn't free up the storage space.
+- **`TRUNCATE`**: Removes all rows from a table without a condition and cannot be rolled back. It is faster and frees up storage space.
+
+**Example:**
+```sql
+DELETE FROM users WHERE age < 30;
+TRUNCATE TABLE users;
+```
+
+---
+
+### **13. What is `LIKE` in SQL?**
+**Answer:**
+The `LIKE` operator in SQL is used to search for a specified pattern in a column. The wildcard characters used are:
+- `%` (represents zero or more characters)
+- `_` (represents a single character)
+
+**Example:**
+```sql
+SELECT * FROM users WHERE name LIKE 'John%';
+```
+This query finds all users whose name starts with "John."
+
+---
+
+These are some common SQL interview questions and answers, focusing on both the fundamentals and advanced SQL operations. Let me know if you need further details on any of the answers.
