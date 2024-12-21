@@ -347,6 +347,71 @@ SELECT * FROM users WHERE name LIKE 'John%';
 ```
 This query finds all users whose name starts with "John."
 
----
+### Short Notes on Fetching Nested JSON Data from Databases
 
-These are some common SQL interview questions and answers, focusing on both the fundamentals and advanced SQL operations. Let me know if you need further details on any of the answers.
+#### **1. MySQL: Querying Nested JSON**
+MySQL supports JSON data types (introduced in version 5.7). Use `JSON_EXTRACT()` or the shorthand operator `->` to extract nested JSON data.
+
+**Example Query:**
+```sql
+SELECT 
+    JSON_EXTRACT(user_info, '$.address.city') AS city
+FROM users;
+```
+Use `JSON_UNQUOTE()` to remove quotes:
+```sql
+SELECT 
+    JSON_UNQUOTE(JSON_EXTRACT(user_info, '$.address.city')) AS city
+FROM users;
+```
+
+**Alternative shorthand:**
+```sql
+SELECT 
+    user_info->'$.address.city' AS city
+FROM users;
+```
+
+#### **2. PostgreSQL: Querying Nested JSON**
+PostgreSQL uses `->`, `->>`, and `#>>` operators to extract data from JSON columns.
+
+**Example Query:**
+```sql
+SELECT 
+    user_info->'address'->>'city' AS city
+FROM users;
+```
+- `->` returns a JSON object.
+- `->>` returns a string value from the JSON object.
+
+#### **3. MongoDB (NoSQL): Querying Nested JSON**
+MongoDB uses dot notation to query nested data in documents.
+
+**Example Query:**
+```js
+db.users.find({ "user_info.address.city": "New York" })
+```
+
+#### **4. Querying Arrays Inside JSON**
+You can also query arrays within a JSON column by specifying the array index.
+
+**MySQL:**
+```sql
+SELECT 
+    JSON_EXTRACT(user_info, '$.friends[0].name') AS friend_1_name
+FROM users;
+```
+
+**PostgreSQL:**
+```sql
+SELECT 
+    user_info->'friends'->0->>'name' AS friend_1_name
+FROM users;
+```
+
+#### **Conclusion:**
+- **MySQL** uses `JSON_EXTRACT()` and shorthand `->`.
+- **PostgreSQL** uses `->` (JSON object) and `->>` (text extraction).
+- **MongoDB** uses dot notation to query nested documents.
+
+Let me know if you need further clarification!
